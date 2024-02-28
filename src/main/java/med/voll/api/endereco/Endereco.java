@@ -13,6 +13,7 @@ public class Endereco {
 	
 	public Endereco() {
 	}
+	
 	private String logradouro;
 	private String bairro;
 	private String cep;
