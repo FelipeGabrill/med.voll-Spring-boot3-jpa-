@@ -1,9 +1,7 @@
-package med.voll.api.medico;
+package med.voll.api.pacientes;
 
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -15,50 +13,39 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import med.voll.api.endereco.Endereco;
 
-@Table(name = "medicos")
-@Entity(name = "Medico")
+@Table(name = "pacientes")
+@Entity(name = "Paciente")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Medico {
+public class Paciente {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	private String cpf;
+	
 	private String nome;
 	private String email;
 	private String telefone;
-	private String crm;
-	
-	@Enumerated(EnumType.STRING)
-	private Especialidade especialidade;
 	
 	@Embedded
 	private Endereco endereco;
 	
 	private boolean ativo;
 	
-	public Medico() {
+	public Paciente() {
 	}
 	
-	public Medico(DadosCadastroMedico dados) {
+	public Paciente(DadosCadastroPaciente dados) {
 		this.ativo = true;
 		this.nome = dados.nome();
 		this.email = dados.email();
+		this.cpf = dados.cpf();
 		this.telefone = dados.telefone();
-		this.crm = dados.crm();
-		this.especialidade = dados.especialidade();
 		this.endereco = new Endereco(dados.endereco());
-	}
-
-	public boolean isAtivo() {
-		return ativo;
-	}
-
-	public void setAtivo(boolean ativo) {
-		this.ativo = ativo;
 	}
 
 	public Long getId() {
@@ -67,6 +54,14 @@ public class Medico {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getCpf() {
+		return cpf;
+	}
+
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
 	}
 
 	public String getNome() {
@@ -93,22 +88,6 @@ public class Medico {
 		this.telefone = telefone;
 	}
 
-	public String getCrm() {
-		return crm;
-	}
-
-	public void setCrm(String crm) {
-		this.crm = crm;
-	}
-
-	public Especialidade getEspecialidade() {
-		return especialidade;
-	}
-
-	public void setEspecialidade(Especialidade especialidade) {
-		this.especialidade = especialidade;
-	}
-
 	public Endereco getEndereco() {
 		return endereco;
 	}
@@ -117,19 +96,26 @@ public class Medico {
 		this.endereco = endereco;
 	}
 
-	public void atualizarInformacoes(@Valid DadosAtualizacaoMedico dados) {
-		if (dados.nome() != null) {
+	public boolean isAtivo() {
+		return ativo;
+	}
+
+	public void setAtivo(boolean ativo) {
+		this.ativo = ativo;
+	}
+	
+	public void atualizarInformacoes(@Valid DadosAtualizacaoPaciente dados) {
+		if (dados.nome() != null ) {
 			this.nome = dados.nome();
 		}
 		if (dados.telefone() != null) {
 			this.telefone = dados.telefone();
 		}
 		if (dados.endereco() != null) {
-			this.endereco.atualizarInformacoes(dados.endereco());
+			this.endereco.atualizarInformacoes(dados.endereco());;
 		}
-		
 	}
-
+	
 	public void excluir() {
 		this.ativo = false;
 	}
